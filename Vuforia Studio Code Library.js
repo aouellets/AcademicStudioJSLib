@@ -39,7 +39,9 @@ $scope.occlude = function(occludeGeomety){
  
 $scope.selectGeometry = function(geometry,shader){
     $scope.app.view.currentView.wdg[geometry]['shader'] = shader;
-    $scope.app.view.currentView.wdg[geometry]
+    $scope.app.view.currentView.wdg[geometry];
+    currentSeletion = geometry ;
+
 
 }
 
@@ -111,10 +113,13 @@ $scope.selectGeometry = function(geometry,shader){
   
   
   
-  //.view.Repair_Sequence_1.wdg["toggleButton-1"].pressed
+  //This function reverses the currently selected sequence 
   
   $scope.backSequence = function () {
-   if (CurrentStep >= 1) {
+    $scope.$broadcast('app.view[playingModel].svc.rewind');
+   
+   /*
+    if (CurrentStep >= 1) {
      $scope.app.view.Repair_Sequence_1.wdg['toggleButton-' + CurrentStep].unpressed = true;
      $scope.app.view.Repair_Sequence_1.wdg['toggleButton-' + CurrentStep].pressed = false;
    }
@@ -132,6 +137,8 @@ $scope.selectGeometry = function(geometry,shader){
      $scope.app.view.Repair_Sequence_1.wdg['toggleButton-8'].unpressed = true;
      $scope.app.view.Repair_Sequence_1.wdg['toggleButton-8'].pressed = false;
     }
+
+    */
   };
   
   
