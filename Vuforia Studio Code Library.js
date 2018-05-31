@@ -62,7 +62,20 @@ lerp
 fromArray 
 AngleBetween
 
+Shader Library
+---------------
 
+Gray Mask
+Yellow Ray
+Red Ray 
+Blue Ray 
+Green Ray
+Xray blue 
+xray red 
+xray yellow 
+xray green
+Hologram 
+Reflective 
 
 
 */
