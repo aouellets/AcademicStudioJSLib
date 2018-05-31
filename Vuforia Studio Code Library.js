@@ -11,11 +11,47 @@ var playingModel = '';
 var playingSequence = '';
 var CurrentStep = 0;
 
+/*
+
+List of functions:
+
+Alexander Builds 
+----------------
+
+consoleLog
+occlude
+selectGeometry 
+setStep
+setProgressBar
+toggleButtons
+changeResource
+toggleGeometry 
+toggleItems
+toggleItem
+nextStep
+backStep
+playStep
+playSequence 
+rewindSequence
+
+
+Vector Library
+---------------
+
+Vector
+prototype
+
+
+
+
+*/
 
 // Console log is a function that prints the JSON Object to the developer tools console for debugging 
 $scope.consoleLog = function() {
 	console.log($scope.app);
 }
+
+
 
 //occulde is a function that toggles the occslusion of a selected object
 // the function takes a model or model item as an argument and flips the occulde state of the object 
@@ -33,13 +69,15 @@ $scope.occlude = function(occludeGeomety){
 }
 
 
+
+
 // given a piece of geometry and a shader, applies shader to geometry 
 // geometry and shader arguments must use single quotes 
  
  
 $scope.selectGeometry = function(geometry,shader){
     $scope.app.view.currentView.wdg[geometry]['shader'] = shader;
-    $scope.app.view.currentView.wdg[geometry];
+    //$scope.app.view.currentView.wdg[geometry];
     currentSeletion = geometry ;
 
 
@@ -53,6 +91,8 @@ $scope.selectGeometry = function(geometry,shader){
     $scope.app.view.currentView.wdg[playingModel]['currentStep']= Step;
     CurrentStep = Step;
   }
+
+
 
   //a function that updates the progress bar to refelct the current step
   // to use, invoke the function and it will use the global var current step to update 
@@ -74,17 +114,82 @@ $scope.selectGeometry = function(geometry,shader){
                 .currentView
                 .wdg[`toggleButton-${n}`]
                 .pressed = false;
+
+          $scope.app
+                .view
+                .currentView
+                .wdg[`toggleButton-${n}`]
+                .unpressed = true;
     
   }
+
+  // a function that toggles the states of buttons within a menu 
+
+$scope.toggleButtons = function(name) {
+	const {wdg} = $scope.app.view.currentView;
+	for (const n of Object.freeze([
+		'optionA',
+		'optionB',
+		'optionC',
+		'optionD',
+		'optionE',
+		'optionF',
+	]))
+	if (n !== name)
+		wdg[`toggleButton-${n}`].pressed = false;
+};
+
+
     
     //given an image widget and a resource, changes the resource of the image 
+    // widget name should use single quote notation, and the resource should be double quotes 
+
+    // e.g. changeResource('Image-1',"app/resources/Uploaded/Image.jpg");
+
     $scope.changeResource = function(widget,resource){
-      $scope.app.view.wdg[widget].imgsrc = resource;
+      $scope.app.currentView.wdg[widget].imgsrc = resource;
+      
+      //example resource arugment: "app/resources/Uploaded/Image.jpg"
+      //background-image: url(#{$resources}/Uploaded/image.png)
     };
     
     
-    //given a widget and a state (T/F), invokes the changeResource function and changes the state 
-    $scope.toggleItem = function (widget,state){
+    
+
+// a function that toggles applying a shader to a single piece of geometry among an array of options 
+$scope.ToggleGeometry = function(geometry){
+  
+  const {wdg} = $scope.app.view.currentView;
+  for (const item of[
+    'property-1',
+    'property-2',
+    'property-3',
+    'property-4',
+    'item-1',
+      'item-2',
+      'item-3',
+      'item-4',
+     ])
+    
+  if (item == geometry)
+    wdg[`modelItem-${n}`]['shader'] = 'xray_green';
+
+
+if (item !== geometry)
+    wdg[`modelItem-${n}`]['shader'] = 'xray_blue';
+    
+};
+
+    //given a widget and a property (must be boolean) the state flips
+    $scope.toggleItem = function (widget,property){
+
+  if ($scope.app.view.currentView.wdg[widget].property == true)
+  $scope.app.view.currentView.wdg[widget].property = false;
+
+else {
+    $scope.app.view.Technician_Dashboard.wdg[occludeGeomety].occlude = true;
+}
+
     };
     
     // a function that advances all the icons to to next step 
@@ -115,7 +220,7 @@ $scope.selectGeometry = function(geometry,shader){
   
   //This function reverses the currently selected sequence 
   
-  $scope.backSequence = function () {
+  $scope.rewindSequence = function () {
     $scope.$broadcast('app.view[playingModel].svc.rewind');
    
    /*
@@ -209,4 +314,134 @@ $scope.selectGeometry = function(geometry,shader){
     
     */
     
+   function Vector(x, y, z) {
+    this.x = x || 0;
+    this.y = y || 0;
+    this.z = z || 0;
+  }
+  
+  Vector.prototype = {
+    negative: function() {
+      return new Vector(-this.x, -this.y, -this.z);
+    },
+    add: function(v) {
+      if (v instanceof Vector) return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
+      else return new Vector(this.x + v, this.y + v, this.z + v);
+    },
+    subtract: function(v) {
+      if (v instanceof Vector) return new Vector(this.x - v.x, this.y - v.y, this.z - v.z);
+      else return new Vector(this.x - v, this.y - v, this.z - v);
+    },
+    multiply: function(v) {
+      if (v instanceof Vector) return new Vector(this.x * v.x, this.y * v.y, this.z * v.z);
+      else return new Vector(this.x * v, this.y * v, this.z * v);
+    },
+    divide: function(v) {
+      if (v instanceof Vector) return new Vector(this.x / v.x, this.y / v.y, this.z / v.z);
+      else return new Vector(this.x / v, this.y / v, this.z / v);
+    },
+    equals: function(v) {
+      return this.x == v.x && this.y == v.y && this.z == v.z;
+    },
+    dot: function(v) {
+      return this.x * v.x + this.y * v.y + this.z * v.z;
+    },
+    cross: function(v) {
+      return new Vector(
+        this.y * v.z - this.z * v.y,
+        this.z * v.x - this.x * v.z,
+        this.x * v.y - this.y * v.x
+      );
+    },
+    length: function() {
+      return Math.sqrt(this.dot(this));
+    },
+    unit: function() {
+      return this.divide(this.length());
+    },
+    min: function() {
+      return Math.min(Math.min(this.x, this.y), this.z);
+    },
+    max: function() {
+      return Math.max(Math.max(this.x, this.y), this.z);
+    },
+    toAngles: function() {
+      return {
+        theta: Math.atan2(this.z, this.x),
+        phi: Math.asin(this.y / this.length())
+      };
+    },
+    angleTo: function(a) {
+      return Math.acos(this.dot(a) / (this.length() * a.length()));
+    },
+    toArray: function(n) {
+      return [this.x, this.y, this.z].slice(0, n || 3);
+    },
+    clone: function() {
+      return new Vector(this.x, this.y, this.z);
+    },
+    init: function(x, y, z) {
+      this.x = x; this.y = y; this.z = z;
+      return this;
+    }
+  };
+  
+  Vector.negative = function(a, b) {
+    b.x = -a.x; b.y = -a.y; b.z = -a.z;
+    return b;
+  };
+  Vector.add = function(a, b, c) {
+    if (b instanceof Vector) { c.x = a.x + b.x; c.y = a.y + b.y; c.z = a.z + b.z; }
+    else { c.x = a.x + b; c.y = a.y + b; c.z = a.z + b; }
+    return c;
+  };
+  Vector.subtract = function(a, b, c) {
+    if (b instanceof Vector) { c.x = a.x - b.x; c.y = a.y - b.y; c.z = a.z - b.z; }
+    else { c.x = a.x - b; c.y = a.y - b; c.z = a.z - b; }
+    return c;
+  };
+  Vector.multiply = function(a, b, c) {
+    if (b instanceof Vector) { c.x = a.x * b.x; c.y = a.y * b.y; c.z = a.z * b.z; }
+    else { c.x = a.x * b; c.y = a.y * b; c.z = a.z * b; }
+    return c;
+  };
+  Vector.divide = function(a, b, c) {
+    if (b instanceof Vector) { c.x = a.x / b.x; c.y = a.y / b.y; c.z = a.z / b.z; }
+    else { c.x = a.x / b; c.y = a.y / b; c.z = a.z / b; }
+    return c;
+  };
+  Vector.cross = function(a, b, c) {
+    c.x = a.y * b.z - a.z * b.y;
+    c.y = a.z * b.x - a.x * b.z;
+    c.z = a.x * b.y - a.y * b.x;
+    return c;
+  };
+  Vector.unit = function(a, b) {
+    var length = a.length();
+    b.x = a.x / length;
+    b.y = a.y / length;
+    b.z = a.z / length;
+    return b;
+  };
+  Vector.fromAngles = function(theta, phi) {
+    return new Vector(Math.cos(theta) * Math.cos(phi), Math.sin(phi), Math.sin(theta) * Math.cos(phi));
+  };
+  Vector.randomDirection = function() {
+    return Vector.fromAngles(Math.random() * Math.PI * 2, Math.asin(Math.random() * 2 - 1));
+  };
+  Vector.min = function(a, b) {
+    return new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+  };
+  Vector.max = function(a, b) {
+    return new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+  };
+  Vector.lerp = function(a, b, fraction) {
+    return b.subtract(a).multiply(fraction).add(a);
+  };
+  Vector.fromArray = function(a) {
+    return new Vector(a[0], a[1], a[2]);
+  };
+  Vector.angleBetween = function(a, b) {
+    return a.angleTo(b);
+  };
   
