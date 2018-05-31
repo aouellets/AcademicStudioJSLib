@@ -39,7 +39,28 @@ Vector Library
 ---------------
 
 Vector
-prototype
+
+prototype:
+add 
+subtract 
+mulitply 
+divide 
+dot 
+cross
+length 
+unit 
+min 
+max
+toAngles
+anglesTo
+toArray
+clone 
+init 
+fromAngles
+randomDirection 
+lerp
+fromArray 
+AngleBetween
 
 
 
