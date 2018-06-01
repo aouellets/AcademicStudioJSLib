@@ -5,7 +5,7 @@
 
 //List of useful globale variables 
 
-var currentView = Home;
+var currentView = $scope.app.params.viewName;
 var currentSeletion = '';
 var playingModel = '';
 var playingSequence = '';
@@ -26,8 +26,8 @@ setProgressBar
 toggleButtons
 changeResource
 toggleGeometry 
-toggleItems
-toggleItem
+toggleProperty
+selectModelItem
 nextStep
 backStep
 playStep
@@ -215,13 +215,13 @@ if (item !== geometry)
 };
 
     //given a widget and a property (must be boolean) the state flips
-    $scope.toggleItem = function (widget,property){
+    $scope.toggleProperty = function (widget,property){
 
   if ($scope.app.view.currentView.wdg[widget].property == true)
   $scope.app.view.currentView.wdg[widget].property = false;
 
 else {
-    $scope.app.view.Technician_Dashboard.wdg[occludeGeomety].occlude = true;
+    $scope.app.view.currentView.wdg[widget].property = true;
 }
 
     };
